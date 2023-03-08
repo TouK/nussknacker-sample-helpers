@@ -30,10 +30,17 @@ repositories {
     maven("https://packages.confluent.io/maven")
 }
 
-//todo: ugly but works with subproject
+dependencies {
+    implementation(platform("pl.touk.nussknacker:nussknacker-bom_2.12:${nussknackerVersion}"))
+    compileOnly("org.scala-lang:scala-library")
+    testImplementation("org.scala-lang:scala-library")
+    compileOnly("pl.touk.nussknacker:nussknacker-extensions-api_2.12")
+}
+
 tasks.register<Copy>("copyFatJarToDockerDir") {
     dependsOn(tasks.shadowJar)
-    from(file("helpers/build/lib/helpers-all.jar"))
+    from(tasks.shadowJar.flatMap { it.archiveFile }.get().asFile.absolutePath)
+    rename { "customModel.jar" }
     into(file("docker"))
 }
 
@@ -42,9 +49,11 @@ fun commonDockerAction(from: String, target: String, task: DockerBuildImage) {
         dependsOn("copyFatJarToDockerDir")
         inputDir.set(file("docker"))
         images.add("$target:latest")
-        buildArgs.putAll(mapOf(
-            "NU_IMAGE" to "$from:${nussknackerVersion}_scala-2.12"
-        ))
+        buildArgs.putAll(
+            mapOf(
+                "NU_IMAGE" to "$from:${nussknackerVersion}_scala-2.12"
+            )
+        )
     }
 }
 

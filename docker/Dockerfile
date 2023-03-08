@@ -1,3 +1,3 @@
 ARG NU_IMAGE
 FROM $NU_IMAGE
-COPY helpers-all.jar /opt/nussknacker/model/defaultModel.jar
+COPY customModel.jar /opt/nussknacker/model/defaultModel.jar
