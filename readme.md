@@ -5,7 +5,7 @@
 
 #### Run NU in embedded mode (Request-Response) for manual testing
 ```bash
-docker run -it -p 8080:8080 -p 8181:8181 -e DEFAULT_SCENARIO_TYPE=request-response-embedded nussknacker-sample-helper:latest
+docker run -it -p 8080:8080 -p 8181:8181 nussknacker-sample-helper:latest
 ```
 
 #### Notes
